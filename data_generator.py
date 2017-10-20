@@ -218,7 +218,7 @@ def get_anchor_gt(all_img_data, cfg, img_size_calc_function, backend, mode='trai
         # zero-center by mean voxel, and preprocess scan
         x_img = x_img.astype('float32')
         x_img = (x_img - cfg.min_bound) / (cfg.max_bound - cfg.max_bound)
-        x_img = np.clip(x_img, 0, 1)
+        #x_img = np.clip(x_img, 0, 1)
 
         x_img = np.expand_dims(x_img, axis=0)
         # expand channel dim
