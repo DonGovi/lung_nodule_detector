@@ -38,4 +38,22 @@ val_imgs = [s for s in all_imgs if s['imageset'] == 'test']
 print('Num train samples {}'.format(len(train_imgs)))
 print('Num val samples {}'.format(len(val_imgs)))
 
-data_gen
+data_gen_train = data_generators.get_anchor_gt(train_imgs, C, nn.get_img_output_length, 
+                K.image_dim_ordering(), mode='train')
+data_gen_val = data_generators.get_anchor_gt(val_imgs, C, nn.get_img_output_length,
+                K.image_dim_ordering(), mode='val')
+
+
+if K.image_dim_ordering() == 'th':
+    input_shape_img = (1, None, None, None)
+else:
+    input_shape_img = (None, None, None, 1)
+
+img_input = Input(shape=input_shape_img)
+
+shared_layers = nn.nn_base(img_input, trainable=True)
+
+num_anchors = len(C.anchor_scales)
+rpn = nn.rpn(shared_layers, num_anchors)
+
+model_rpn = Model(img_input, rpn[:2])
