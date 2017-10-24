@@ -57,3 +57,6 @@ num_anchors = len(C.anchor_scales)
 rpn = nn.rpn(shared_layers, num_anchors)
 
 model_rpn = Model(img_input, rpn[:2])
+
+optimizer = Adam(lr=1e-5)
+model_rpn.compile(optimizer=optimizer, loss=[losses.rpn_loss_cls(num_anchors), losses.rpn_loss_regr(num_anchors)])
